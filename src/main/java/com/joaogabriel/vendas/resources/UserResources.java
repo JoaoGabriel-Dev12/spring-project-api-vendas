@@ -1,28 +1,41 @@
 package com.joaogabriel.vendas.resources;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.joaogabriel.vendas.entities.User;
+import com.joaogabriel.vendas.service.UserService;
 
 @RestController
 @RequestMapping("/users")
 public class UserResources {
 	
+	@Autowired
+	private UserService service;
+	
 	@GetMapping("/")
-	public List<User> findAll(){
+	public ResponseEntity<List<User>> findAll(){
 		
-		List<User> list = new ArrayList<>();
-		list.add(new User(1L, "João Gabriel", "joao@email", "80028922", "senha"));
-		list.add(new User(1L, "Bianca", "bianca@email", "5637829", "1234"));
-		list.add(new User(1L, "Bolsonaro mito", "bolsonaro@email", "123456789", "globolixo"));
-		list.add(new User(1L, "Osama Bin Laden", "bomba@email", "87879871", "torresgemeas"));
+		List<User> list = service.findAll();
 		
-		return list;
+		return ResponseEntity.ok().body(list);
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<Object> findById(@PathVariable Long id){
+		User u = service.findById(id);
+		
+		if(u == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
+		}
+		
+		return ResponseEntity.ok().body(u);
 	}
 }
