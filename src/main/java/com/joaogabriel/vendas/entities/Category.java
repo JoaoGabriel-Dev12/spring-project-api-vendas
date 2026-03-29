@@ -1,23 +1,30 @@
 package com.joaogabriel.vendas.entities;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "tb_category")
 public class Category {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
 	
-	public Category() {}
+	@Transient
+	private Set<Product> products = new HashSet<>();
+
+	public Category() {
+	}
 
 	public Category(Long id, String name) {
 		super();
@@ -41,6 +48,10 @@ public class Category {
 		this.name = name;
 	}
 
+	public Set<Product> getProducts() {
+		return products;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, name);
@@ -57,5 +68,5 @@ public class Category {
 		Category other = (Category) obj;
 		return Objects.equals(id, other.id) && Objects.equals(name, other.name);
 	}
-	
+
 }
