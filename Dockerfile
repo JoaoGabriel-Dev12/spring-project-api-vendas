@@ -5,7 +5,9 @@ COPY . .
 
 RUN mvn clean package -DskipTests
 
-FROM openjdk:21-jdk-slim 
+FROM amazoncorretto:21-al2023-headless
+
+WORKDIR /app
 
 EXPOSE 8080
 
